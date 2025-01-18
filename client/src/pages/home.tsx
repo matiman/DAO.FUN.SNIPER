@@ -19,6 +19,15 @@ export default function Home() {
     });
   };
 
+  // Function to get background color based on index
+  const getBackgroundColor = (index: number) => {
+    const colors = [
+      'bg-primary/5',
+      'bg-secondary/5'
+    ];
+    return colors[index % colors.length];
+  };
+
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-5xl mx-auto space-y-6">
@@ -86,15 +95,30 @@ export default function Home() {
 
         <Card className="p-6">
           <h2 className="text-lg font-semibold mb-4">Webhook Logs</h2>
-          <ScrollArea className="h-[500px] w-full rounded-md border p-4">
-            <div className="font-mono text-sm space-y-4">
+          <ScrollArea className="h-[500px] w-full rounded-md border">
+            <div className="font-mono text-sm divide-y">
               {messages.map((msg, i) => (
-                <div key={i} className="space-y-2">
-                  <div className="text-muted-foreground">
-                    {msg.payload.timestamp} - {msg.payload.method} Request
+                <div key={msg.payload.id} className={`p-4 ${getBackgroundColor(i)}`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-muted-foreground">
+                      {new Date(msg.payload.timestamp).toLocaleString()} - {msg.payload.method} Request
+                    </div>
+                    <div className="text-xs px-2 py-1 rounded bg-primary/10 text-primary">
+                      ID: {msg.payload.id.slice(0, 8)}
+                    </div>
                   </div>
-                  <div className="bg-muted p-3 rounded-md overflow-x-auto">
-                    <pre>{JSON.stringify(msg.payload.body, null, 2)}</pre>
+                  <div className="space-y-2">
+                    <div className="bg-muted p-3 rounded-md overflow-x-auto">
+                      <pre className="text-xs">{JSON.stringify(msg.payload.body, null, 2)}</pre>
+                    </div>
+                    <details className="text-xs">
+                      <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
+                        Headers
+                      </summary>
+                      <div className="mt-2 bg-muted p-3 rounded-md overflow-x-auto">
+                        <pre>{JSON.stringify(msg.payload.headers, null, 2)}</pre>
+                      </div>
+                    </details>
                   </div>
                 </div>
               ))}
