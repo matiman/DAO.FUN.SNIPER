@@ -22,8 +22,8 @@ export default function Home() {
   // Function to get background color based on index
   const getBackgroundColor = (index: number) => {
     const colors = [
-      'bg-primary/5',
-      'bg-secondary/5'
+      'bg-green-50 dark:bg-green-950/30',
+      'bg-black/5 dark:bg-black/30'
     ];
     return colors[index % colors.length];
   };
@@ -98,27 +98,40 @@ export default function Home() {
           <ScrollArea className="h-[500px] w-full rounded-md border">
             <div className="font-mono text-sm divide-y">
               {messages.map((msg, i) => (
-                <div key={msg.payload.id} className={`p-4 ${getBackgroundColor(i)}`}>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-muted-foreground">
-                      {new Date(msg.payload.timestamp).toLocaleString()} - {msg.payload.method} Request
-                    </div>
-                    <div className="text-xs px-2 py-1 rounded bg-primary/10 text-primary">
-                      ID: {msg.payload.id.slice(0, 8)}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="bg-muted p-3 rounded-md overflow-x-auto">
-                      <pre className="text-xs">{JSON.stringify(msg.payload.body, null, 2)}</pre>
-                    </div>
-                    <details className="text-xs">
-                      <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
-                        Headers
-                      </summary>
-                      <div className="mt-2 bg-muted p-3 rounded-md overflow-x-auto">
-                        <pre>{JSON.stringify(msg.payload.headers, null, 2)}</pre>
+                <div key={msg.payload.id} className={`p-6 ${getBackgroundColor(i)}`}>
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between">
+                      <div className="text-xl font-bold">
+                        {new Date(msg.payload.timestamp).toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit'
+                        })}
                       </div>
-                    </details>
+                      <div className="text-xs px-2 py-1 rounded bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 font-mono">
+                        ID: {msg.payload.id.slice(0, 8)}
+                      </div>
+                    </div>
+                    <div className="pl-4 border-l-2 border-green-200 dark:border-green-800 space-y-3">
+                      <div className="text-sm font-semibold text-green-700 dark:text-green-300">
+                        {msg.payload.method} Request
+                      </div>
+                      <div className="bg-white dark:bg-black/20 p-4 rounded-md overflow-x-auto">
+                        <pre className="text-xs">{JSON.stringify(msg.payload.body, null, 4)}</pre>
+                      </div>
+                      <details className="text-xs">
+                        <summary className="cursor-pointer text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200">
+                          Headers
+                        </summary>
+                        <div className="mt-2 bg-white dark:bg-black/20 p-4 rounded-md overflow-x-auto">
+                          <pre>{JSON.stringify(msg.payload.headers, null, 4)}</pre>
+                        </div>
+                      </details>
+                    </div>
                   </div>
                 </div>
               ))}
