@@ -9,12 +9,13 @@ export default function Home() {
   const { messages, connected } = useWebSocket();
   const { toast } = useToast();
   const webhookUrl = `${window.location.protocol}//${window.location.host}/api/webhook`;
+  const publicUrl = `${window.location.protocol}//${window.location.host}`;
 
-  const copyUrl = async () => {
-    await navigator.clipboard.writeText(webhookUrl);
+  const copyUrl = async (url: string, type: 'webhook' | 'ui') => {
+    await navigator.clipboard.writeText(url);
     toast({
       title: "Copied!",
-      description: "Webhook URL copied to clipboard"
+      description: `${type === 'webhook' ? 'Webhook' : 'Public UI'} URL copied to clipboard`
     });
   };
 
@@ -38,23 +39,49 @@ export default function Home() {
                 </div>
               )}
             </div>
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2"
-              onClick={copyUrl}
-            >
-              <Copy className="h-4 w-4" />
-              Copy URL
-            </Button>
           </div>
 
-          <div className="bg-muted p-3 rounded-md font-mono text-sm">
-            {webhookUrl}
-          </div>
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-sm font-semibold">Public UI URL</h2>
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2"
+                  onClick={() => copyUrl(publicUrl, 'ui')}
+                >
+                  <Copy className="h-4 w-4" />
+                  Copy URL
+                </Button>
+              </div>
+              <div className="bg-muted p-3 rounded-md font-mono text-sm">
+                {publicUrl}
+              </div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Share this URL with your team to view incoming webhook events in real-time.
+              </p>
+            </div>
 
-          <p className="mt-4 text-sm text-muted-foreground">
-            Share this URL with your team. They can send POST requests to this endpoint to see the webhook events in real-time.
-          </p>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-sm font-semibold">Webhook Endpoint</h2>
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2"
+                  onClick={() => copyUrl(webhookUrl, 'webhook')}
+                >
+                  <Copy className="h-4 w-4" />
+                  Copy URL
+                </Button>
+              </div>
+              <div className="bg-muted p-3 rounded-md font-mono text-sm">
+                {webhookUrl}
+              </div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Send POST requests to this endpoint to log webhook events.
+              </p>
+            </div>
+          </div>
         </Card>
 
         <Card className="p-6">
