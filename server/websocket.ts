@@ -2,6 +2,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import type { Server } from 'http';
 import type { IncomingMessage } from 'http';
 import type { WebhookPayload, WebSocketMessage } from '../client/src/types/webhook';
+import { log } from './vite';
 
 export class WebhookWebSocketServer {
   private wss: WebSocketServer;
@@ -18,9 +19,11 @@ export class WebhookWebSocketServer {
     this.clients = new Set();
 
     this.wss.on('connection', (ws) => {
+      log('WebSocket client connected');
       this.clients.add(ws);
 
       ws.on('close', () => {
+        log('WebSocket client disconnected');
         this.clients.delete(ws);
       });
 
@@ -43,9 +46,12 @@ export class WebhookWebSocketServer {
       payload
     };
 
+    log(`Broadcasting webhook to ${this.clients.size} clients`);
+
     this.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify(message));
+        log('Webhook sent to client');
       }
     });
   }
