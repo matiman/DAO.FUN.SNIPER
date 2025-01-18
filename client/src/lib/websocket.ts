@@ -27,7 +27,13 @@ export function useWebSocket() {
     ws.onmessage = (event) => {
       console.log('Received message:', event.data);
       const message = JSON.parse(event.data) as WebSocketMessage;
-      setMessages((prev) => [...prev, message]);
+      setMessages((prev) => [message, ...prev]); // Prepend new messages
+      // Notify about new webhook
+      toast({
+        title: 'New Webhook',
+        description: `Received ${message.payload.method} request`,
+        variant: 'default'
+      });
     };
 
     ws.onerror = (error) => {

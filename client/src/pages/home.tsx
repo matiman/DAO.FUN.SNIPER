@@ -98,7 +98,10 @@ export default function Home() {
           <ScrollArea className="h-[500px] w-full rounded-md border">
             <div className="font-mono text-sm divide-y">
               {messages.map((msg, i) => (
-                <div key={msg.payload.id} className={`p-6 ${getBackgroundColor(i)}`}>
+                <div 
+                  key={msg.payload.id} 
+                  className={`p-6 ${getBackgroundColor(i)} ${i === 0 ? 'animate-in fade-in-0 duration-500' : ''}`}
+                >
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                       <div className="text-xl font-bold text-gray-900 dark:text-gray-100">
