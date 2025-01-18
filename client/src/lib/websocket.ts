@@ -9,6 +9,7 @@ const WS_URL = `${WS_PROTOCOL}//${window.location.host}`;
 export function useWebSocket() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [messages, setMessages] = useState<WebSocketMessage[]>([]);
+  const [connected, setConnected] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -16,6 +17,7 @@ export function useWebSocket() {
 
     ws.onopen = () => {
       console.log('WebSocket connected');
+      setConnected(true);
       toast({
         title: 'Connected',
         description: 'WebSocket connection established'
@@ -30,6 +32,7 @@ export function useWebSocket() {
 
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
+      setConnected(false);
       toast({
         title: 'Connection Error',
         description: 'Failed to connect to WebSocket server',
@@ -39,6 +42,7 @@ export function useWebSocket() {
 
     ws.onclose = () => {
       console.log('WebSocket disconnected, attempting to reconnect...');
+      setConnected(false);
       setTimeout(() => {
         setSocket(new WebSocket(WS_URL));
       }, 1000);
@@ -51,5 +55,5 @@ export function useWebSocket() {
     };
   }, [toast]);
 
-  return { messages };
+  return { messages, connected };
 }

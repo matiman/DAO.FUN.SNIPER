@@ -2,11 +2,11 @@ import { useWebSocket } from '@/lib/websocket';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Copy, Terminal } from 'lucide-react';
+import { Copy, Terminal, Wifi, WifiOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Home() {
-  const { messages } = useWebSocket();
+  const { messages, connected } = useWebSocket();
   const { toast } = useToast();
   const webhookUrl = `${window.location.protocol}//${window.location.host}/api/webhook`;
 
@@ -26,6 +26,17 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <Terminal className="h-5 w-5" />
               <h1 className="text-xl font-bold">Webhook Listener</h1>
+              {connected ? (
+                <div className="flex items-center gap-1 text-sm text-green-500">
+                  <Wifi className="h-4 w-4" />
+                  <span>Connected</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1 text-sm text-red-500">
+                  <WifiOff className="h-4 w-4" />
+                  <span>Disconnected</span>
+                </div>
+              )}
             </div>
             <Button 
               variant="outline" 
@@ -36,10 +47,14 @@ export default function Home() {
               Copy URL
             </Button>
           </div>
-          
+
           <div className="bg-muted p-3 rounded-md font-mono text-sm">
             {webhookUrl}
           </div>
+
+          <p className="mt-4 text-sm text-muted-foreground">
+            Share this URL with your team. They can send POST requests to this endpoint to see the webhook events in real-time.
+          </p>
         </Card>
 
         <Card className="p-6">
