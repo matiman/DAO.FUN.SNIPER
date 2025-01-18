@@ -35,7 +35,7 @@ export default function Home() {
           <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-2">
               <Terminal className="h-5 w-5" />
-              <h1 className="text-xl font-bold">Webhook Listener</h1>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Webhook Listener</h1>
               {connected ? (
                 <div className="flex items-center gap-1 text-sm text-green-500">
                   <Wifi className="h-4 w-4" />
@@ -53,17 +53,17 @@ export default function Home() {
           <div className="space-y-6">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-sm font-semibold">Public UI URL</h2>
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Public UI URL</h2>
                 <Button 
                   variant="outline" 
                   className="flex items-center gap-2"
                   onClick={() => copyUrl(publicUrl, 'ui')}
                 >
                   <Copy className="h-4 w-4" />
-                  Copy URL
+                  <span className="text-gray-900 dark:text-gray-100">Copy URL</span>
                 </Button>
               </div>
-              <div className="bg-muted p-3 rounded-md font-mono text-sm">
+              <div className="bg-muted p-3 rounded-md font-mono text-sm text-gray-900 dark:text-gray-100">
                 {publicUrl}
               </div>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -73,17 +73,17 @@ export default function Home() {
 
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-sm font-semibold">Webhook Endpoint</h2>
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Webhook Endpoint</h2>
                 <Button 
                   variant="outline" 
                   className="flex items-center gap-2"
                   onClick={() => copyUrl(webhookUrl, 'webhook')}
                 >
                   <Copy className="h-4 w-4" />
-                  Copy URL
+                  <span className="text-gray-900 dark:text-gray-100">Copy URL</span>
                 </Button>
               </div>
-              <div className="bg-muted p-3 rounded-md font-mono text-sm">
+              <div className="bg-muted p-3 rounded-md font-mono text-sm text-gray-900 dark:text-gray-100">
                 {webhookUrl}
               </div>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -94,14 +94,14 @@ export default function Home() {
         </Card>
 
         <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Webhook Logs</h2>
+          <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Webhook Logs</h2>
           <ScrollArea className="h-[500px] w-full rounded-md border">
             <div className="font-mono text-sm divide-y">
               {messages.map((msg, i) => (
                 <div key={msg.payload.id} className={`p-6 ${getBackgroundColor(i)}`}>
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
-                      <div className="text-xl font-bold">
+                      <div className="text-xl font-bold text-gray-900 dark:text-gray-100">
                         {new Date(msg.payload.timestamp).toLocaleDateString('en-US', {
                           weekday: 'long',
                           year: 'numeric',
@@ -121,14 +121,14 @@ export default function Home() {
                         {msg.payload.method} Request
                       </div>
                       <div className="bg-white dark:bg-black/20 p-4 rounded-md overflow-x-auto">
-                        <pre className="text-xs">{JSON.stringify(msg.payload.body, null, 4)}</pre>
+                        <pre className="text-xs text-gray-900 dark:text-gray-100">{JSON.stringify(msg.payload.body, null, 4)}</pre>
                       </div>
                       <details className="text-xs">
                         <summary className="cursor-pointer text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200">
                           Headers
                         </summary>
                         <div className="mt-2 bg-white dark:bg-black/20 p-4 rounded-md overflow-x-auto">
-                          <pre>{JSON.stringify(msg.payload.headers, null, 4)}</pre>
+                          <pre className="text-gray-900 dark:text-gray-100">{JSON.stringify(msg.payload.headers, null, 4)}</pre>
                         </div>
                       </details>
                     </div>
